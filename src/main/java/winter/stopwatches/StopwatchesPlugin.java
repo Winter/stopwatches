@@ -1,7 +1,8 @@
 package winter.stopwatches;
 
-import com.google.inject.Provides;
 import javax.inject.Inject;
+import org.apache.commons.lang3.StringUtils;
+import com.google.inject.Provides;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
 import net.runelite.api.MenuAction;
@@ -61,7 +62,11 @@ public class StopwatchesPlugin extends Plugin {
             .setType(MenuAction.RUNELITE)
 			.onClick(e -> { 
 				chatboxPanelManager.openTextInput("Stopwatch Name")
-					.onDone(name -> { stopwatchManager.addStopwatch(name); })
+					.onDone(name -> { 
+						if (StringUtils.isEmpty(name)) return;
+
+						stopwatchManager.addStopwatch(name); 
+					})
 					.build();
 			});
 
