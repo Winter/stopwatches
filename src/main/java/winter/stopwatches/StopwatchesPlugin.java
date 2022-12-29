@@ -27,6 +27,9 @@ public class StopwatchesPlugin extends Plugin {
 	private OverlayManager overlayManager;
 
 	@Inject 
+	private ConfigManager configManager;
+
+	@Inject 
 	private StopwatchManager stopwatchManager;
 
 	@Inject 
@@ -37,11 +40,13 @@ public class StopwatchesPlugin extends Plugin {
 
 	@Override
 	protected void startUp() throws Exception {
+		stopwatchManager.loadStopwatches(configManager);
 		overlayManager.add(stopwatchesOverlay);
 	}
 
 	@Override
 	protected void shutDown() throws Exception {
+		stopwatchManager.saveStopwatches(configManager);
 		overlayManager.remove(stopwatchesOverlay);
 	}
 
@@ -50,6 +55,7 @@ public class StopwatchesPlugin extends Plugin {
 		GameState gameState = gameStateChanged.getGameState();
 
 		if (gameState == GameState.LOGGED_IN || gameState == GameState.LOGIN_SCREEN) {
+			stopwatchManager.saveStopwatches(configManager);
 			stopwatchesOverlay.loggedIn = gameState == GameState.LOGGED_IN;
 		}
 	}
