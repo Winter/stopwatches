@@ -11,10 +11,11 @@ public class StopwatchManager {
     public void loadStopwatches(ConfigManager configManager) {
         configManager.getConfigurationKeys("stopwatches")
             .forEach(wholeKeyName -> {
-
                 if (wholeKeyName.startsWith("stopwatches.stopwatches_stopwatch_elapsed_")) {
                     String key = wholeKeyName.substring(42);
                     Long elapsed = configManager.getConfiguration("stopwatches", "stopwatches_stopwatch_elapsed_" + key, Long.class);
+
+                    if (elapsed <= 0) return;
 
                     if (containsStopwatch(key) || addStopwatch(key)) {
                         setStopwatchElapsed(key, elapsed);
